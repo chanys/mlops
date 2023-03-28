@@ -1,0 +1,5 @@
+wdir: ../model_output
+outs:
+- md5: 2aece4173ac4a9af8d5a0c6cf37a02a5
+  size: 438023489
+  path: checkpoint.pth.tar
