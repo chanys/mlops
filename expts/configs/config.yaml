@@ -1,0 +1,17 @@
+model:
+  max_seq_length: 128
+  encoder_name: bert-base-uncased
+
+hyperparams:
+  epoch: 3
+  lr: 2e-05
+  warmup_steps: 0
+  batch_size: 32
+
+processing:
+  seed: 42
+  model_path: model_output
+  cache_dir: /home/chanys/repos/mlops/cache_huggingface
+
+data:
+  text_field_name: sentence

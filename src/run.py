@@ -90,7 +90,8 @@ if __name__ == '__main__':
         classifier = SentenceClassification(config)
         sentence = 'Huawei reportedly said it has developed its own chip design tools, a move aimed at side-stepping U.S. sanctions.'
         sentence2 = 'This is sentence grammatical but not.'
-        ds = Dataset.from_dict({'sentence': [sentence, sentence2]})
+        sentence3 = 'How what think I space now'
+        ds = Dataset.from_dict({'sentence': [sentence, sentence2, sentence3]})
         predictions = classifier.inference(ds)
         print(predictions)
 
