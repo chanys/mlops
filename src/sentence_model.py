@@ -1,10 +1,9 @@
-import logging
 import os
+import logging
 
 import torch
 import torch.nn as nn
-
-from transformers import AutoTokenizer, BertModel, DistilBertModel
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from src.utils import set_seed
 
@@ -12,27 +11,37 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class Model(nn.Module):
+class SentenceModel(nn.Module):
     def __init__(self, configuration, device):
         super().__init__()
-
         self.encoder_name = configuration['model']['encoder_name']
         self.device = device
 
         set_seed()
 
-        if self.encoder_name.startswith('bert'):
-            self.encoder = BertModel.from_pretrained(self.encoder_name, output_hidden_states=True, cache_dir=configuration['processing']['cache_dir'])
-        elif self.encoder_name.startswith('distilbert'):
-            self.encoder = DistilBertModel.from_pretrained(self.encoder_name, output_hidden_states=True, cache_dir=configuration['processing']['cache_dir'])
+        # if self.encoder_name.startswith('bert'):
+        #     self.encoder = BertModel.from_pretrained(self.encoder_name, output_hidden_states=True, cache_dir=configuration['processing']['cache_dir'])
+        # elif self.encoder_name.startswith('distilbert'):
+        #     self.encoder = DistilBertModel.from_pretrained(self.encoder_name, output_hidden_states=True, cache_dir=configuration['processing']['cache_dir'])
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.encoder_name, cache_dir=configuration['processing']['cache_dir'])
 
-    def forward(self, batch):
-        pass
 
-    def predict(self, batch):
-        pass
+        self.num_classes = len(configuration['data']['labels'])
+
+        self.encoder = AutoModelForSequenceClassification.from_pretrained(
+            configuration['model']['encoder_name'], num_labels=self.num_classes
+        )
+
+        # self.linear = nn.Linear(self.encoder.config.hidden_size, self.num_classes)
+        self.label_criteria = torch.nn.CrossEntropyLoss()
+
+    def forward(self, input_ids, attention_masks, labels=None):
+        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_masks, labels=labels)
+        return outputs
+        #cls = outputs.last_hidden_state[:, 0]
+        #logits = self.linear(cls)
+        #return logits
 
     def save_model(self, model_dir, optimizer):
         print('=> Saving model to {}'.format(model_dir))
@@ -63,5 +72,4 @@ class Model(nn.Module):
         logger.info(
             'n_trainable_params: {0}, n_nontrainable_params: {1}'.format(n_trainable_params, n_nontrainable_params))
         logger.info('-' * 100)
-
 

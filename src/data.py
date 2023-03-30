@@ -31,7 +31,7 @@ class SpanDataset(Dataset):
         # padding=True will pad the examples with 0s to the size of the longest example in the batch
         # truncation=True will truncate the examples to the model's max sequence length
         # tokenizer.model_input_names = ['input_ids', 'attention_mask']
-        return self.tokenizer(batch[self.text_field_name], padding=True, truncation=True)
+        return self.tokenizer(batch[self.text_field_name], padding='max_length', truncation=True, max_length=self.max_seq_length)
 
     def encode(self):
         # batch_size=None will tokenize the entire dataset at once, ensuring we pad each example to be the same length

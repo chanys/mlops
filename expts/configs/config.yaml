@@ -1,12 +1,12 @@
 model:
-  max_seq_length: 128
+  max_seq_length: 64
   encoder_name: bert-base-uncased
 
 hyperparams:
-  epoch: 3
+  epoch: 2
   lr: 2e-05
   warmup_steps: 0
-  batch_size: 32
+  batch_size: 64
 
 processing:
   seed: 42
