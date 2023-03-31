@@ -10,6 +10,7 @@ import onnxruntime as ort
 from torch import softmax
 from transformers import AutoTokenizer
 
+from src.onnx_inference import ONNXPredictor
 from src.sentence_classification import SentenceClassification
 from src.utils import to_numpy
 
@@ -91,31 +92,7 @@ def convert_model(configuration, examples):
     )
 
 
-class ONNXPredictor(object):
-    def __init__(self, configuration):
-        self.config = configuration
-        model_path = '{}/model.onnx'.format(self.config['processing']['model_path'])
-        self.ort_session = ort.InferenceSession(model_path)
-        self.labels = ["unacceptable", "acceptable"]
-        self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'],
-                                                       cache_dir=self.config['processing']['cache_dir'])
-    def predict(self, text):
-        ds = Dataset.from_dict({'sentence': [text]})
-        extractor = SentenceClassification(config)
-        data_loader = extractor.prepare_dataset(ds)
-        input_batch = next(iter(data_loader))
-        ort_inputs = {
-            'input_ids': to_numpy(input_batch['input_ids'][0].unsqueeze(0).to(extractor.device)),
-            'attention_mask': to_numpy(input_batch['attention_mask'][0].unsqueeze(0).to(extractor.device)),
-        }
 
-        ort_outs = self.ort_session.run(None, ort_inputs)
-        scores = softmax(torch.from_numpy(ort_outs[0]), dim=-1)[0]
-
-        predictions = []
-        for score, label in zip(scores, self.labels):
-            predictions.append({"label": label, "score": score})
-        return predictions
 
 
 
@@ -173,5 +150,7 @@ if __name__ == '__main__':
     elif args.mode == 'onnx_predict':
         config['data']['labels'] = train_data.features['label'].names
         onnx_predictor = ONNXPredictor(config)
-        predictions = onnx_predictor.predict('Huawei reportedly said it has developed its own chip design tools, a move aimed at side-stepping U.S. sanctions.')
+        text = 'How what think I space now'
+        predictions = onnx_predictor.predict(text)
+
         print(predictions)

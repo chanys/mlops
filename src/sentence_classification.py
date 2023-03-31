@@ -31,7 +31,11 @@ class SentenceClassification(object):
             model = SentenceModel(self.config, self.device)
             model_path = os.path.join(self.config['processing']['model_path'], 'checkpoint.pth.tar')
             logger.info('Loading model from {}'.format(model_path))
-            checkpoint = torch.load(model_path)
+            if self.config['processing']['device'] == 'cpu':
+                # checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+                checkpoint = torch.load(model_path)
+            else:
+                checkpoint = torch.load(model_path)
             model.load_state_dict(checkpoint['state_dict'])
         else:           # train from scratch
             model = SentenceModel(self.config, self.device)
