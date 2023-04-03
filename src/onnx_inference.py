@@ -1,3 +1,4 @@
+import os
 
 import torch
 from datasets import Dataset
@@ -21,6 +22,10 @@ class ONNXPredictor(object):
         self.labels = ["unacceptable", "acceptable"]
         print('In ONNXPredictor __init__, loading AutoTokenizer.from_pretrained, config[model][encoder_name]=', self.config['model']['encoder_name'])
         # self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+        print(os.listdir('.'))
+        print(os.listdir('../expts/model_output'))
+
         self.tokenizer = AutoTokenizer.from_pretrained('../expts/model_output')
         print('Done loading tokenizer')
 
