@@ -17,8 +17,8 @@ class ONNXPredictor(object):
         model_path = '{}/model.onnx'.format(self.config['processing']['model_path'])
         self.ort_session = ort.InferenceSession(model_path)
         self.labels = ["unacceptable", "acceptable"]
-        self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'],
-                                                       cache_dir=self.config['processing']['cache_dir'])
+        self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'])
+                                                       #cache_dir=self.config['processing']['cache_dir'])
     def predict(self, text):
         ds = Dataset.from_dict({'sentence': [text]})
         # extractor = SentenceClassification(self.config)
