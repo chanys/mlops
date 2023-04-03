@@ -20,8 +20,8 @@ class ONNXPredictor(object):
         print('instantiated self.ort_session')
         self.labels = ["unacceptable", "acceptable"]
         print('In ONNXPredictor __init__, loading AutoTokenizer.from_pretrained, config[model][encoder_name]=', self.config['model']['encoder_name'])
-        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-        # self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'])
+        # self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        self.tokenizer = AutoTokenizer.from_pretrained('../expts/model_output')
         print('Done loading tokenizer')
 
     def predict(self, text):
