@@ -15,10 +15,14 @@ class ONNXPredictor(object):
     def __init__(self, configuration):
         self.config = configuration
         model_path = '{}/model.onnx'.format(self.config['processing']['model_path'])
+        print('In ONNXPredictor __init__, model_path=', model_path)
         self.ort_session = ort.InferenceSession(model_path)
+        print('instantiated self.ort_session')
         self.labels = ["unacceptable", "acceptable"]
+        print('In ONNXPredictor __init__, loading AutoTokenizer.from_pretrained, config[model][encoder_name]=', self.config['model']['encoder_name'])
         self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'])
-                                                       #cache_dir=self.config['processing']['cache_dir'])
+        print('Done loading tokenizer')
+
     def predict(self, text):
         ds = Dataset.from_dict({'sentence': [text]})
         # extractor = SentenceClassification(self.config)
