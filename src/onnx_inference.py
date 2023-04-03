@@ -4,7 +4,7 @@ from datasets import Dataset
 import numpy as np
 import onnxruntime as ort
 from torch import softmax
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, BertTokenizer
 
 from src.data import SpanDataset
 from src.sentence_classification import SentenceClassification
@@ -20,7 +20,8 @@ class ONNXPredictor(object):
         print('instantiated self.ort_session')
         self.labels = ["unacceptable", "acceptable"]
         print('In ONNXPredictor __init__, loading AutoTokenizer.from_pretrained, config[model][encoder_name]=', self.config['model']['encoder_name'])
-        self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'])
+        self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        # self.tokenizer = AutoTokenizer.from_pretrained(self.config['model']['encoder_name'])
         print('Done loading tokenizer')
 
     def predict(self, text):
