@@ -16,7 +16,7 @@ class ONNXPredictor(object):
         self.config = configuration
         model_path = '{}/model.onnx'.format(self.config['processing']['model_path'])
         print('In ONNXPredictor __init__, model_path=', model_path)
-        self.ort_session = ort.InferenceSession(model_path)
+        # self.ort_session = ort.InferenceSession(model_path)
         print('instantiated self.ort_session')
         self.labels = ["unacceptable", "acceptable"]
         print('In ONNXPredictor __init__, loading AutoTokenizer.from_pretrained, config[model][encoder_name]=', self.config['model']['encoder_name'])
