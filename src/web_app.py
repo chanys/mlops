@@ -17,7 +17,6 @@ app = FastAPI(title="MLOps Basics App")
 
 # load the model
 # configuration
-print('../expts/configs=', os.listdir('../expts/configs'))
 print('expts/configs=', os.listdir('expts/configs'))
 initialize("expts/configs")  # this must be a relative directory
 cfg = compose(config_name="config.yaml")
