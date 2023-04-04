@@ -24,9 +24,10 @@ class ONNXPredictor(object):
         # self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 
-        print(os.listdir('expts/model_output'))
+        print('ls expts/model_output=', os.listdir('expts/model_output'))
+        print('ls expts/tokenizer=', os.listdir('expts/tokenizer'))
 
-        self.tokenizer = AutoTokenizer.from_pretrained('expts/model_output')
+        self.tokenizer = AutoTokenizer.from_pretrained('expts/tokenizer')
         print('Done loading tokenizer')
 
     def predict(self, text):
