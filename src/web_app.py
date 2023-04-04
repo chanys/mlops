@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from onnx_inference import ONNXPredictor
 from hydra import initialize, compose
@@ -15,7 +17,9 @@ app = FastAPI(title="MLOps Basics App")
 
 # load the model
 # configuration
-initialize("../expts/configs")  # this must be a relative directory
+print('../expts/configs=', os.listdir('../expts/configs'))
+print('expts/configs=', os.listdir('expts/configs'))
+initialize("expts/configs")  # this must be a relative directory
 cfg = compose(config_name="config.yaml")
 config = OmegaConf.to_object(cfg)
 config['processing']['mode'] = 'inference'
